@@ -1,126 +1,85 @@
 <template>
-  <div @click="clickHandle">
-
-    <div class="userinfo" @click="bindViewTap">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
-      <img class="userinfo-avatar" src="/static/images/user.png" background-size="cover" />
-
-      <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
-      </div>
-    </div>
-
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
-      </div>
-    </div>
-
-    <form class="form-container">
-      <input type="text" class="form-control" :value="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
-
-    <a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>
-
-    <div class="all">
-        <div class="left">
-        </div>
-        <div class="right">
-        </div>
-    </div>
+  <div class="active">
+     <div class="active-list">
+         <ul>
+            <li v-for="(item,index) in activeList" :key="index" @click="toActivePage(item.id)">
+               <div class="active-img">
+                  <img :src="item.imgs" alt="">
+               </div>
+               <div class="active-intro">
+                  <h3>{{item.title}}</h3>
+                  <p class="active-num">{{item.num}}人参与,已投{{ticket}}票</p>
+                  <p class="active-time">{{item.countdown.endtime}} 结束</p>
+               </div>
+            </li>
+         </ul>
+     </div>
   </div>
 </template>
 
 <script>
-import card from '@/components/card'
+import actives from '../../data/active'
 
-export default {
-  data () {
-    return {
-      motto: 'Hello miniprograme',
-      userInfo: {
-        nickName: 'mpvue',
-        avatarUrl: 'http://mpvue.com/assets/logo.png'
-      }
+export default {                             
+   data(){
+     return{
+       activeList:[]
+     }
+   },
+   mounted() {
+    this.getActiveList();
+   },
+   methods: {
+     //获取数据
+     getActiveList(){
+        this.activeList=actives.active.data;
+     },
+     //路由跳转
+    toActivePage(id){
+      var url='/pages/page/main?pageId='+id;
+      wx.navigateTo({url})
     }
-  },
-
-  components: {
-    card
-  },
-
-  methods: {
-    bindViewTap () {
-      const url = '../logs/main'
-      if (mpvuePlatform === 'wx') {
-        mpvue.switchTab({ url })
-      } else {
-        mpvue.navigateTo({ url })
-      }
-    },
-    clickHandle (ev) {
-      console.log('clickHandle:', ev)
-      // throw {message: 'custom test'}
-    }
-  },
-
-  created () {
-    // let app = getApp()
-  }
+   },
 }
 </script>
 
 <style scoped>
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.usermotto {
-  margin-top: 150px;
-}
-
-.form-control {
-  display: block;
-  padding: 0 12px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-}
-.all{
-  width:7.5rem;
-  height:1rem;
-  background-color:blue;
-}
-.all:after{
-  display:block;
-  content:'';
-  clear:both;
-}
-.left{
-  float:left;
-  width:3rem;
-  height:1rem;
-  background-color:red;
-}
-
-.right{
-  float:left;
-  width:4.5rem;
-  height:1rem;
-  background-color:green;
-}
+  .active{
+    padding: 20px;
+    background: #ff90A3
+  }
+  .active-list li{
+    width:100%;
+    /* height: 400px; */
+    background: white;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border-radius: 10px
+  }
+  .active-img{
+    width: 100%;
+    height: 230px;
+  }
+  .active-img img{
+    width: 100%;
+    height: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  .active-intro{
+    padding: 10px
+  }
+  .active-intro h3{
+   font-size: 18px;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis
+  }
+  .active-num{
+   margin: 10px 0
+  }
+  .active-time{
+    font-size: 12px;
+    color: gray
+  }
 </style>
