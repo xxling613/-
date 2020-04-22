@@ -1,7 +1,7 @@
 # pick
 
 > A Mpvue project
-
+练手的一个投票小程序，没有接口部分功能自己写的json
 ## Build Setup
 
 ``` bash
